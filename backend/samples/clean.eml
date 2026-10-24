@@ -1,0 +1,25 @@
+Return-Path: <priya.raman@yourcompany.com>
+From: "Priya Raman" <priya.raman@yourcompany.com>
+Reply-To: <priya.raman@yourcompany.com>
+To: <team@yourcompany.com>
+Subject: Notes from Tuesday's sprint review
+Date: Wed, 21 Oct 2026 16:40:00 +0530
+Message-ID: <CAF1x2@yourcompany.com>
+Authentication-Results: mx.yourcompany.com; spf=pass smtp.mailfrom=yourcompany.com; dkim=pass header.d=yourcompany.com; dmarc=pass header.from=yourcompany.com
+Received: from mail.yourcompany.com (20.198.76.12) by mx.yourcompany.com with ESMTPS id 7Q2; Wed, 21 Oct 2026 16:40:03 +0530
+Received: from ws-2231.yourcompany.com (10.0.4.22) by mail.yourcompany.com with ESMTPSA id 3R9; Wed, 21 Oct 2026 16:40:03 +0530
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+
+Hi team,
+
+Notes from yesterday's review are in the shared doc. Three decisions:
+
+1. We are keeping the current onboarding flow for another sprint.
+2. The reporting bug is assigned to Arjun.
+3. Next review is Thursday at 4pm.
+
+No action needed from anyone else today.
+
+Thanks,
+Priya

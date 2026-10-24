@@ -1,0 +1,28 @@
+services:
+  phishguard:
+    build: .
+    image: phishguard:0.9.0
+    container_name: phishguard
+    ports:
+      # host:container — open http://localhost:8000
+      - "8000:8000"
+    environment:
+      # Optional reputation keys. Leave unset to run in BYO-key mode.
+      GSB_API_KEY: ${GSB_API_KEY:-}
+      VT_API_KEY: ${VT_API_KEY:-}
+      URLSCAN_API_KEY: ${URLSCAN_API_KEY:-}
+      PORT: 8000
+    volumes:
+      # Persists baselines, vendor bank records, clusters and receipts.
+      - phishguard-data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python3", "-c",
+             "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=4).status==200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+volumes:
+  phishguard-data:

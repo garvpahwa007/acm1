@@ -1,0 +1,21 @@
+Return-Path: <alert@upi-kyc-verify.top>
+From: "SBI Alert" <alert@upi-kyc-verify.top>
+To: <customer@example.com>
+Subject: Your KYC is expiring today - account will be blocked
+Date: Thu, 22 Oct 2026 21:02:10 +0530
+Message-ID: <9912@upi-kyc-verify.top>
+Authentication-Results: mx.example.com; spf=softfail; dkim=none; dmarc=none
+Received: from mail.top (103.216.82.19) by mx.example.com; Thu, 22 Oct 2026 21:02:13 +0530
+MIME-Version: 1.0
+Content-Type: text/html; charset="utf-8"
+
+<html><body>
+<p>Dear Customer,</p>
+<p>Your KYC is expired and your account will be blocked within 24 hours due to non-KYC.
+Please complete re-KYC immediately.</p>
+<p>Also confirm the UPI collect request sent to your app — approve the collect request
+to receive the refund of Rs. 4,999 credited to your account. Enter your UPI PIN to accept.</p>
+<p>Update here: <a href="http://sbi.kyc-update-verify.top/login/verify">https://onlinesbi.sbi</a></p>
+<p>Electricity bill is also pending, pay tonight to avoid disconnection: <a href="http://bit.ly/3xKycPay">http://bit.ly/3xKycPay</a></p>
+<p>For help reply to this mail or call 9876543210.</p>
+</body></html>

@@ -1,0 +1,9 @@
+# ---- runtime ----
+flask>=3.0,<4
+gunicorn>=21.2          # production WSGI server (used by the Dockerfile CMD)
+requests>=2.31
+dnspython>=2.6          # DNS: A/MX/NS/TXT, SPF & DMARC presence
+dkimpy>=1.1             # real DKIM signature verification
+
+# ---- optional ----
+# Safe Browsing / VirusTotal need no package: they're plain HTTPS calls with your own key.

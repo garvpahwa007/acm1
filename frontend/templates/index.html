@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#07111f" />
+  <meta name="description" content="PhishGuard is an explainable phishing link and email checker frontend." />
+  <title>PhishGuard — Link & Email Security</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 20 6v5c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6l8-3Z"/><path d="m8.7 12 2.1 2.1 4.7-4.7"/></svg>
+        </div>
+        <div><strong>PhishGuard</strong><small>Threat intelligence</small></div>
+      </div>
+      <div class="nav-label">Workspace</div>
+      <nav class="nav" aria-label="Main navigation">
+        <button class="active" data-scroll="overview"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Overview</span></button>
+        <button data-scroll="scanner"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span>URL Scanner</span></button>
+        <button data-scroll="scanner"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="m4 7 8 6 8-6"/></svg><span>Email Analyzer</span></button>
+        <button data-scroll="activity"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16"/><path d="m7 15 3-3 3 2 5-6"/></svg><span>Threat Feed</span></button>
+      </nav>
+      <div class="sidebar-spacer"></div>
+      <div class="privacy-card"><div class="privacy-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Privacy first</div><p>Messages are analyzed by your PhishGuard server. Link scans may query DNS, registration and reputation services.</p></div>
+      <div class="version"><a href="/advanced">Open advanced engine view →</a></div>
+    </aside>
+
+    <main class="content" id="overview">
+      <header class="topbar">
+        <div><h1>Security overview</h1><p>Check links and emails before they become a problem.</p></div>
+        <div class="top-actions"><div class="live-status"><i class="live-dot"></i> Checking engine…</div><div class="avatar" aria-label="User profile">AR</div></div>
+      </header>
+
+      <section class="hero">
+        <h2>Make every click a confident one.</h2>
+        <p>PhishGuard combines URL intelligence, email signals, and explainable risk analysis to help you spot social engineering before it starts.</p>
+        <div class="hero-stats"><div class="hero-stat"><strong>7+</strong><span>security signals</span></div><div class="hero-stat"><strong>0–100</strong><span>explainable risk score</span></div><div class="hero-stat"><strong>Private</strong><span>self-hosted engine</span></div></div>
+      </section>
+
+      <section class="scan-panel" id="scanner">
+        <div class="panel-head"><div><h3>Start a security scan</h3><p>Paste a suspicious link or analyze an email message and its headers.</p></div><span class="simulated">FLASK ENGINE</span></div>
+        <div class="tabs" role="tablist"><button class="active" id="urlTab" role="tab" aria-selected="true">Link / URL</button><button id="emailTab" role="tab" aria-selected="false">Email / Headers</button></div>
+
+        <form class="url-form scan-form" id="urlForm">
+          <div class="input-wrap"><input id="urlInput" type="url" autocomplete="off" placeholder="https://example.com/login" aria-label="URL to scan" /></div>
+          <button class="primary-btn" type="submit">Analyze link <span aria-hidden="true">→</span></button>
+        </form>
+
+        <form class="email-form" id="emailForm">
+          <div class="input-wrap"><textarea id="emailInput" placeholder="Paste raw email headers and body here..." aria-label="Email content to analyze"></textarea></div>
+          <div class="email-actions"><button class="primary-btn" type="submit">Analyze email <span aria-hidden="true">→</span></button><button class="secondary-btn" type="button" id="uploadBtn">Upload .eml / .txt</button><input id="fileInput" type="file" accept=".eml,.txt" hidden /><span class="file-name" id="fileName">No file selected</span></div>
+        </form>
+        <p class="hint">Try the <button class="secondary-btn" id="sampleBtn" type="button">sample scan</button> to see how explainable findings work.</p>
+      </section>
+
+      <section class="dashboard-grid">
+        <article class="card results-card" id="resultsCard">
+          <div class="panel-head"><div><h3>Latest scan</h3><p class="card-subtitle">Your evidence-based security report appears here.</p></div></div>
+          <div class="empty-state" id="emptyState"><div><div class="empty-icon"><svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6l8-3Z"/><path d="M12 8v4M12 16h.01"/></svg></div><strong>No scan yet</strong><span>Start with a URL or email above. We’ll show the signals behind the result.</span></div></div>
+          <div class="result-content" id="resultContent">
+            <div class="result-top"><div class="risk-gauge"><div class="gauge" id="gauge"><b id="scoreValue">0</b></div><div class="risk-copy"><strong id="riskLabel">Safe</strong><span id="riskSummary">Low-risk signals detected</span></div></div><div class="scan-meta"><b id="scannedTarget">—</b><span id="scanTime">Just now</span></div></div>
+            <div class="finding-list" id="findingList"></div>
+          </div>
+        </article>
+
+        <aside class="card" id="signalsCard">
+          <h3>Signal coverage</h3><p class="card-subtitle">Signals evaluated by the PhishGuard engine.</p>
+          <div class="metric"><span>URL structure</span><b>Active</b></div><div class="bar"><span style="width: 96%"></span></div>
+          <div class="metric"><span>Threat intelligence</span><b id="intelStatus">Checking…</b></div><div class="bar"><span class="blue" style="width: 84%"></span></div>
+          <div class="metric"><span>Email authentication</span><b>Active</b></div><div class="bar"><span class="amber" style="width: 73%"></span></div>
+          <div class="metric"><span>Evidence explanations</span><b>Active</b></div><div class="bar"><span class="blue" style="width: 91%"></span></div>
+          <p class="disclaimer">URL scans combine lexical checks with registration, DNS, TLS and guarded page previews. Safe Browsing and VirusTotal are optional. Missing evidence stays visible in the verdict. Reports, receipts and campaign views are available in the advanced engine view.</p>
+        </aside>
+      </section>
+
+      <section class="card activity" id="activity">
+        <div class="activity-head"><div><h3>Recent scans</h3><p class="card-subtitle">Recent scans saved in this browser until cleared.</p></div><button id="clearHistory" type="button">Clear history</button></div>
+        <div class="recent-list" id="recentList"><div class="empty-state" style="min-height: 100px"><span>No recent scans yet.</span></div></div>
+      </section>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</body>
+</html>

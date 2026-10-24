@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>PhishGuard — link &amp; email checker with receipts</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='engine.css') }}">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%234f7cff'/><text x='16' y='22' font-size='15' font-family='sans-serif' font-weight='700' fill='white' text-anchor='middle'>PG</text></svg>">
+</head>
+<body>
+<div class="app">
+
+  <!-- ============================== SIDEBAR ============================== -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">PG</div>
+      <div>
+        <div class="brand-name">PhishGuard</div>
+        <div class="brand-sub">verdicts with receipts</div>
+      </div>
+    </div>
+
+    <nav class="nav" aria-label="Main">
+      <div class="nav-label">Check</div>
+      <button class="nav-item" data-route="link" aria-current="page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
+        Check a link <span class="kbd">1</span>
+      </button>
+      <button class="nav-item" data-route="email">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+        Check an email <span class="kbd">2</span>
+      </button>
+
+      <div class="nav-label">Organisation</div>
+      <button class="nav-item" data-route="sweep">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 3v6h6"/><circle cx="12" cy="12" r="3"/></svg>
+        Org sweep <span class="kbd">3</span>
+      </button>
+      <button class="nav-item" data-route="coverage">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+        Coverage &amp; design
+      </button>
+
+      <div class="nav-label">Recent</div>
+      <div class="recent" id="recent"></div>
+    </nav>
+
+    <div class="side-foot">
+      <div class="engine-card">
+        <div class="row"><span class="k">engine</span><span class="v" id="engine-ver">–</span></div>
+        <div class="row"><span class="k">intel</span><span class="v" id="engine-intel">–</span></div>
+        <div class="row"><span class="k">domains seen</span><span class="v" id="engine-domains">–</span></div>
+        <div class="row"><span class="k">reports</span><span class="v" id="engine-reports">–</span></div>
+      </div>
+      <button class="nav-item" id="theme-toggle" aria-live="polite">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" id="theme-icon"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg>
+        <span id="theme-label">Light mode</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- =============================== MAIN =============================== -->
+  <div class="main">
+    <header class="topbar">
+      <div>
+        <h1 id="page-title">Check a link</h1>
+        <div class="crumb" id="page-crumb">Instant lexical verdict, then infrastructure, reputation and a click preview</div>
+      </div>
+      <div class="topbar-actions">
+        <div class="chip" id="chip-intel"><span class="dot"></span> intel <b>–</b></div>
+        <div class="chip" id="chip-clusters"><span class="dot"></span> clusters <b>–</b></div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- ------------------------------------------------------- LINK VIEW -->
+      <section class="view" id="view-link">
+        <div class="hero">
+          <h2 class="hero-title">What did you receive?</h2>
+          <p class="hero-sub">Paste a URL. Nothing is ever rendered clickable, and nothing is fetched from your browser.</p>
+          <div class="input-row">
+            <label class="field" for="url-input">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
+              <input id="url-input" type="text" inputmode="url" autocomplete="off" spellcheck="false"
+                     placeholder="hxxps://paypal.com.secure-login-verify[.]top/account/verify" aria-describedby="url-hint">
+              <button class="clear" id="url-clear" title="Clear" aria-label="Clear input" hidden>×</button>
+            </label>
+            <button class="btn btn-primary" id="btn-url">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+              Analyse
+            </button>
+          </div>
+          <div id="url-hint" class="samples">
+            <span class="label">Try one:</span>
+            <button class="sample" data-demo="http://paypal.com.secure-login-verify.top/account/verify?id=8821">brand in subdomain</button>
+            <button class="sample" data-demo="https://hdfcbank.com.secure-verify.top/kyc">bank lookalike</button>
+            <button class="sample" data-demo="https://microsoft.com@evil-login.ru/">@ decoy</button>
+            <button class="sample" data-demo="https://bit.ly/3xKyc">shortener</button>
+            <button class="sample" data-demo="https://www.google.com">clean control</button>
+          </div>
+          <div class="pipeline" id="url-pipeline" hidden style="margin-top:16px">
+            <span class="stage" data-stage="lexical"><span class="pip"></span>lexical</span>
+            <span class="stage" data-stage="infra"><span class="pip"></span>registration &amp; DNS</span>
+            <span class="stage" data-stage="rep"><span class="pip"></span>reputation</span>
+            <span class="stage" data-stage="preview"><span class="pip"></span>click preview</span>
+            <span class="stage" data-stage="baseline"><span class="pip"></span>baseline</span>
+          </div>
+        </div>
+        <div id="url-out" class="stack" style="margin-top:16px" aria-live="polite"></div>
+      </section>
+
+      <!-- ------------------------------------------------------ EMAIL VIEW -->
+      <section class="view" id="view-email" hidden>
+        <div class="hero">
+          <h2 class="hero-title">Check a suspicious email</h2>
+          <p class="hero-sub">Drop a <b>.eml</b> or paste the raw source with headers. SPF, DKIM and DMARC are verified, links are scored, attachments are hashed, and bank details are diffed against the vendor's trusted baseline.</p>
+
+          <div class="grid grid-2" style="gap:16px">
+            <div class="drop" id="eml-drop" tabindex="0" role="button" aria-label="Choose an .eml file">
+              <input type="file" id="eml-file" accept=".eml,.txt,message/rfc822" hidden>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5-5 5 5"/><path d="M12 5v12"/></svg>
+              <div class="drop-title" id="drop-title">Drop an .eml here</div>
+              <div class="drop-sub" id="drop-sub">or click to browse · 12 MB max · nothing is uploaded anywhere else</div>
+            </div>
+            <div class="stack-sm">
+              <div class="seg" role="group" aria-label="Input mode">
+                <button data-emode="file" aria-pressed="true">File</button>
+                <button data-emode="paste" aria-pressed="false">Paste source</button>
+              </div>
+              <textarea class="raw" id="eml-raw" placeholder="Paste full raw source — From:, Received:, DKIM-Signature:, Authentication-Results:, then the body…" hidden></textarea>
+              <div class="samples" style="margin-top:0">
+                <span class="label">Samples:</span>
+                <button class="sample" data-sample="bec_invoice">BEC bank-change</button>
+                <button class="sample" data-sample="india_upi">UPI / KYC</button>
+                <button class="sample" data-sample="digital_arrest">digital arrest</button>
+                <button class="sample" data-sample="clean">clean mail</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="input-row" style="margin-top:16px">
+            <button class="btn btn-primary" id="btn-eml">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+              Analyse email
+            </button>
+            <span class="faint small" style="align-self:center">Files never leave this host. Only hashes and counters are stored.</span>
+          </div>
+        </div>
+        <div id="email-out" class="stack" style="margin-top:16px" aria-live="polite"></div>
+      </section>
+
+      <!-- ------------------------------------------------------ SWEEP VIEW -->
+      <section class="view" id="view-sweep" hidden>
+        <div class="stack">
+          <div class="kpis" id="sweep-kpis"></div>
+          <div class="card">
+            <div class="card-head">
+              <h3 class="card-title">Campaign clusters</h3>
+              <div class="spacer"></div>
+              <span class="faint tiny">clustered by subject + sender + link hosts</span>
+              <button class="btn btn-ghost btn-sm" id="btn-refresh-clusters">Refresh</button>
+            </div>
+            <div id="sweep-list"></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h3 class="card-title">How report-to-sweep works</h3></div>
+            <div class="card-body prose">
+              <p style="margin-top:0">When one person reports a message, we fingerprint the campaign from the
+              normalised subject, the sender and the set of link hosts. Every later recipient is matched to the
+              same cluster, so the warning shows <b>“3 reports · 1 clicked”</b> before they act.</p>
+              <ul>
+                <li><b>Cluster, don't duplicate.</b> A re-sent variant with a new subject prefix or a fresh
+                  lookalike domain still lands in the same cluster when the link hosts match.</li>
+                <li><b>Social proof is the strongest signal.</b> People trust “17 others received this” more
+                  than any risk score.</li>
+                <li><b>Report latency beats detection accuracy.</b> The metric that matters is minutes from
+                  delivery to first report.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- --------------------------------------------------- COVERAGE VIEW -->
+      <section class="view" id="view-coverage" hidden>
+        <div class="stack">
+          <div class="card">
+            <div class="card-head"><h3 class="card-title">What this engine actually does</h3></div>
+            <div class="card-body">
+              <div class="tile-grid">
+                <div class="tile"><div class="n">01</div><h5>Lexical — no network</h5>
+                  <p>IDN &amp; homoglyphs, typosquatting against 180+ brands, brand-in-subdomain, <span class="mono">@</span> decoys, ports, high-abuse TLDs, shorteners, entropy, double extensions, open-redirect wrappers. Runs in ~5&nbsp;ms.</p></div>
+                <div class="tile"><div class="n">02</div><h5>Infrastructure</h5>
+                  <p>RDAP registration age and registrar, DNS (A/MX/NS/SPF/DMARC), TLS issuer and certificate age. A brand-claiming domain with no MX is not a brand.</p></div>
+                <div class="tile"><div class="n">03</div><h5>Reputation</h5>
+                  <p>Google Safe Browsing and VirusTotal with your own key. Missing keys are labelled — never silently treated as clean.</p></div>
+                <div class="tile"><div class="n">04</div><h5>Click preview</h5>
+                  <p>Server-side redirect chain, login-form discovery, and whether a password field POSTs to a different domain. SSRF-guarded, JavaScript never executed.</p></div>
+                <div class="tile"><div class="n">05</div><h5>Email forensics</h5>
+                  <p>SPF/DKIM/DMARC with real signature verification, Received-chain hop analysis, Reply-To and display-name spoofing, BEC lexicon, India scam corpus, attachment flags.</p></div>
+                <div class="tile"><div class="n">06</div><h5>Organisation memory</h5>
+                  <p>First-contact senders and domains, vendor bank-detail diffs against a trusted baseline, time-of-click URL snapshots, and campaign clustering.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-2">
+            <div class="card"><div class="card-head"><h3 class="card-title">Deliberate choices</h3></div>
+              <div class="card-body prose"><ul>
+                <li><b>Progressive verdicts.</b> Lexical answer in milliseconds, corroboration streams in after. A slow checker gets bypassed.</li>
+                <li><b>“Unknown” is a real answer.</b> If infrastructure can't corroborate, we say so. An unexpandable short link is never “safe”.</li>
+                <li><b>Every verdict has reasons.</b> Named signals, weights, thresholds and a receipt ID you can paste into a ticket.</li>
+                <li><b>Never clickable.</b> Everything is defanged — <span class="defang">hxxps://evil[.]com</span>.</li>
+                <li><b>Teach, don't scold.</b> Each signal carries the transferable lesson.</li>
+              </ul></div></div>
+            <div class="card"><div class="card-head"><h3 class="card-title">Deliberate non-features</h3></div>
+              <div class="card-body prose"><ul>
+                <li><b>No opaque “risk score 87”.</b> Scores are derived from auditable signals.</li>
+                <li><b>No JS execution, no form submission.</b> The preview reads HTML and describes it.</li>
+                <li><b>No AI chat bubble.</b> An evidence chain with citations beats prose.</li>
+                <li><b>No silent green ticks.</b> Degraded mode is labelled every time.</li>
+                <li><b>No auto-trust of an email's own numbers.</b> A bank detail from an unverified message never becomes the baseline.</li>
+              </ul></div></div>
+          </div>
+
+          <div class="card"><div class="card-head"><h3 class="card-title">Known limits, stated rather than hidden</h3></div>
+            <div class="card-body prose"><ul>
+              <li><b>.eml only</b> — <span class="mono">.msg</span> needs one more parser.</li>
+              <li><b>No image or QR decoding</b> — attachment hashes are reported instead.</li>
+              <li><b>Public-suffix list is small and India-heavy</b> — swap in the full PSL for wider coverage.</li>
+              <li><b>Single HTML GET preview</b> — JS-gated and login-gated pages won't reveal themselves.</li>
+              <li><b>SQLite</b> is fine for a desk; move to Postgres for multi-tenant.</li>
+            </ul></div></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- drawer + toasts -->
+<div class="drawer-scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true" aria-label="Verdict receipt">
+  <div class="drawer-head">
+    <h3 id="drawer-title">Audit receipt</h3>
+    <div class="spacer" style="margin-left:auto"></div>
+    <button class="btn btn-ghost btn-sm" id="drawer-copy">Copy JSON</button>
+    <button class="btn btn-icon btn-ghost" id="drawer-close" aria-label="Close">×</button>
+  </div>
+  <div class="drawer-body"><pre class="code" id="drawer-code">Loading…</pre></div>
+</aside>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script src="{{ url_for('static', filename='engine.js') }}"></script>
+</body>
+</html>

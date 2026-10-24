@@ -1,0 +1,46 @@
+Return-Path: <accounts@vendorsupplies-billing.co>
+From: "Rajesh Menon (Managing Director)" <accounts@vendorsupplies-billing.co>
+Reply-To: <rajesh.menon.md@securemail-relay.top>
+To: <finance@yourcompany.com>
+Subject: URGENT: Revised remittance details for Invoice INV-2291 - please action today
+Date: Wed, 21 Oct 2026 09:14:22 +0530
+Message-ID: <8f21ac@securemail-relay.top>
+Authentication-Results: mx.yourcompany.com; spf=fail smtp.mailfrom=vendorsupplies-billing.co; dkim=none; dmarc=fail header.from=vendorsupplies-billing.co
+Received: from unknown (185.62.190.44) by mx.yourcompany.com with SMTP id 4X1; Wed, 21 Oct 2026 09:14:25 +0530
+Received: from smtp-out.internal (10.4.11.9) by relay.securemail-relay.top; Wed, 21 Oct 2026 09:14:25 +0530
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="BOUND1"
+
+--BOUND1
+Content-Type: text/plain; charset="utf-8"
+
+Dear Finance Team,
+
+Following our board meeting this morning, please note that our bank account
+details have changed with immediate effect. All future remittances must go to
+the new account below, including the outstanding amount on invoice INV-2291.
+
+Beneficiary: Vendor Supplies Pvt Ltd
+Account number: 50100293847561
+IFSC: HDFC0000123
+
+This is time-sensitive — the payment run closes today at 5pm and the wire must
+be initiated before then or the shipment is held.
+
+Please keep this confidential between us; the MD is handling this directly and
+does not want it discussed with the vendor relationship team until it is settled.
+
+Call me back on +91 98xxxx1234 if you need anything.
+
+Regards,
+Rajesh Menon
+Managing Director
+
+--BOUND1
+Content-Type: application/vnd.ms-word.document.macroEnabled.12; name="INV-2291-revised.docm"
+Content-Disposition: attachment; filename="INV-2291-revised.docm"
+Content-Transfer-Encoding: base64
+
+UEsDBBQABgAIAAAAIQAAAAAAAAAAAAAAAAA=
+
+--BOUND1--
